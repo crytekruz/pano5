@@ -1,0 +1,164 @@
+{
+  "markers": [
+    {
+      "id": "1771014807552",
+      "theta": 1.2514267537947328,
+      "phi": 1.8944218798851278,
+      "text": "Спортивная площадка",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:33:27.552Z"
+    },
+    {
+      "id": "1771014828191",
+      "theta": 1.095424682681226,
+      "phi": 1.7476534372704775,
+      "text": "Школа на 400 уч.",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:33:48.191Z"
+    },
+    {
+      "id": "1771014845717",
+      "theta": 1.4911778828232263,
+      "phi": 1.6970744076484874,
+      "text": "Террасный парк",
+      "fontSize": 14,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "url": "https://crytekruz.github.io/pano3/",
+      "date": "2026-02-13T20:34:05.717Z"
+    },
+    {
+      "id": "1771014862261",
+      "theta": 1.9056311082753166,
+      "phi": 1.7009636169201048,
+      "text": "Пляж",
+      "fontSize": 14,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "url": "https://crytekruz.github.io/pano4/",
+      "date": "2026-02-13T20:34:22.262Z"
+    },
+    {
+      "id": "1771014879644",
+      "theta": 0.8492937821248462,
+      "phi": 1.7550262983627896,
+      "text": "Общественно-деловой центр",
+      "fontSize": 14,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "url": "https://crytekruz.github.io/pano2",
+      "date": "2026-02-13T20:34:39.644Z"
+    },
+    {
+      "id": "1771014897547",
+      "theta": 0.1990452862857375,
+      "phi": 1.827748496326973,
+      "text": "Реабилитационный центр",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:34:57.547Z"
+    },
+    {
+      "id": "1771014916853",
+      "theta": -0.15645411244196997,
+      "phi": 1.930235400564862,
+      "text": "Парк \"У безымянной реки\"",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:35:16.853Z"
+    },
+    {
+      "id": "1771014962948",
+      "theta": -0.8668904724946193,
+      "phi": 2.496944642116792,
+      "text": "Открытая лужайка с арт-объектами",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:36:02.948Z"
+    },
+    {
+      "id": "1771014977482",
+      "theta": 2.2655168687059226,
+      "phi": 2.187420674123508,
+      "text": "Детская площадка",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:36:17.482Z"
+    },
+    {
+      "id": "1771014987168",
+      "theta": 2.0639885976788994,
+      "phi": 2.711395922739289,
+      "text": "Детская площадка",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:36:27.168Z"
+    },
+    {
+      "id": "1771015001071",
+      "theta": 3.069955092763037,
+      "phi": 2.280809526285708,
+      "text": "Канатный парк",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:36:41.071Z"
+    },
+    {
+      "id": "1771015015259",
+      "theta": 0.540243060565523,
+      "phi": 2.1749674742989855,
+      "text": "Детская площадка",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:36:55.259Z"
+    },
+    {
+      "id": "1771015031826",
+      "theta": 0.98322080654435,
+      "phi": 2.1914759772201284,
+      "text": "Зона отдыха с амфитеатром",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "date": "2026-02-13T20:37:11.826Z"
+    }
+  ],
+  "view": {
+    "x": 0.8473198322724123,
+    "y": 21.053824653927617
+  }
+}
