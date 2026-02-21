@@ -82,6 +82,12 @@
             text-decoration: underline;
         }
 
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
         /* Древко */
         .marker-pole {
             position: absolute;
@@ -575,6 +581,7 @@
                     sphere.rotation.y = sphereRotation.y;
                     sphere.rotation.x = sphereRotation.x;
                 }
+                updateMarkerLabels();
                 lastTouchPosition = currentPos;
             } else if (touches.length === 2 && isTouchActive) {
                 const dx = touches[0].clientX - touches[1].clientX;
@@ -646,6 +653,7 @@
                     sphere.rotation.y = sphereRotation.y;
                     sphere.rotation.x = sphereRotation.x;
                 }
+                updateMarkerLabels();
                 previousMousePosition = { x: e.clientX, y: e.clientY };
             });
             document.addEventListener('mouseup', (e) => {
@@ -907,7 +915,7 @@
             if (intersection) {
                 const intersectionPoint = intersection.clone();
                 const quaternion = new THREE.Quaternion();
-                quaternion.setFromEuler(new THREE.Euler(sphereRotation.x, sphereRotation.y, 0));
+                quaternion.setFromEuler(sphere.rotation);
                 intersectionPoint.applyQuaternion(quaternion.inverse());
                 const spherical = new THREE.Spherical();
                 spherical.setFromVector3(intersectionPoint);
@@ -1177,16 +1185,6 @@
                     showMarkerDialog('', '#ffffff');
                 }
             });
-            window.addEventListener('orientationchange', function() {
-                // Даём время браузеру на смену ориентации
-                setTimeout(function() {
-                    camera.aspect = window.innerWidth / window.innerHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                    updateAllPoleHeights();
-                    updateMarkerLabels(); // принудительный пересчёт маркеров
-                }, 200);
-            });
             renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
             document.getElementById('file-input').addEventListener('change', async function(e) {
                 const file = e.target.files[0];
@@ -1242,11 +1240,11 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 
-                // Пересчитываем позиции маркеров и высоту древков
+                // Немедленно пересчитываем маркеры и древки
                 updateAllPoleHeights();
                 updateMarkerLabels();
                 
-                // Принудительно рендерим один кадр, чтобы избежать мерцания
+                // Принудительно рендерим кадр для синхронизации
                 renderer.render(scene, camera);
             });
             try {
