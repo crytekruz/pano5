@@ -52,7 +52,7 @@
         .marker-rect {
             position: absolute;
             left: calc(-3px);
-            bottom: calc(var(--pole-height) - 4px); /* наезд 2px для устранения щели */
+            bottom: calc(var(--pole-height) - 4px); /* наезд 4px для устранения щели */
             
             background: var(--marker-color, #ffffff);
             padding: 0.75em 1.2em;
@@ -250,27 +250,9 @@
 
         /* ===== АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА ===== */
         @media (max-width: 768px) {
-            #controls {
-                bottom: 5px;
-                padding: 4px;
-                gap: 3px;
-                flex-wrap: wrap;
-                justify-content: center;
-                max-width: 95%;
-            }
-            button {
-                padding: 4px 6px;
-                font-size: 10px;
-                min-width: 28px;
-                margin: 2px;
-            }
+            #controls,
             #info {
-                font-size: 9px;
-                max-width: 75%;
-                top: 5px;
-                left: 5px;
-                padding: 3px;
-                line-height: 1.2;
+                display: none !important;
             }
             #panorama-title {
                 font-size: 12px;
@@ -302,26 +284,11 @@
             }
         }
 
-        @media (max-width: 480px) {
-            button {
-                padding: 3px 5px;
-                font-size: 9px;
-                min-width: 24px;
-            }
-            #info {
-                font-size: 8px;
-            }
-        }
-
         /* Для альбомной ориентации на маленьких экранах */
         @media (orientation: landscape) and (max-height: 500px) {
-            #controls {
-                bottom: 3px;
-                padding: 2px;
-            }
-            button {
-                padding: 2px 4px;
-                font-size: 8px;
+            #controls,
+            #info {
+                display: none !important;
             }
         }
     </style>
@@ -340,7 +307,7 @@
         • 💾 Сохранить — записать маркеры в localStorage<br>
         • 📥 Экспорт JSON — сохраняет маркеры + текущий вид в файл<br>
         • 📤 Импорт JSON — загружает маркеры и (если есть) вид из файла<br>
-        <strong>На телефоне:</strong> вращение одним пальцем, зум двумя, долгое нажатие на маркере — удалить.
+        <strong>На телефоне:</strong> вращение одним пальцем, зум двумя.
     </div>
     
     <div id="controls" class="hidden">
@@ -464,13 +431,18 @@
         let touchVelocity = { x: 0, y: 0 };
         let touchZoomStartFov = fov;
 
+        // ========== ФУНКЦИЯ ОПРЕДЕЛЕНИЯ МОБИЛЬНОСТИ ==========
+        function isMobile() {
+            return window.innerWidth <= 768; // можно ужесточить до 480, но оставим 768
+        }
+
         // ========== ИНИЦИАЛИЗАЦИЯ THREE.JS ==========
         function initThreeJS() {
             scene = new THREE.Scene();
             
             camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 3000);
             camera.position.set(0, 0, 0);
-            camera.lookAt(0, 0, 0); // хотя это не обязательно, так как камера в центре
+            camera.lookAt(0, 0, 0);
             
             renderer = new THREE.WebGLRenderer({ 
                 antialias: true,
@@ -626,7 +598,7 @@
             }
         }
 
-        // ========== ДОЛГОЕ НАЖАТИЕ ДЛЯ УДАЛЕНИЯ МАРКЕРА (МОБИЛЬНЫЕ) ==========
+        // ========== ДОЛГОЕ НАЖАТИЕ ДЛЯ УДАЛЕНИЯ МАРКЕРА (ТОЛЬКО ДЕСКТОП) ==========
         function attachLongPressHandler(element, callback) {
             let timer = null;
             const start = (e) => {
@@ -871,9 +843,11 @@
                 return false;
             });
 
-            // Обработчики долгого нажатия для мобильных
-            attachLongPressHandler(container, deleteCallback);
-            attachLongPressHandler(rect, deleteCallback);
+            // Обработчики долгого нажатия для мобильных — подключаем только если не мобильное устройство
+            if (!isMobile()) {
+                attachLongPressHandler(container, deleteCallback);
+                attachLongPressHandler(rect, deleteCallback);
+            }
 
             // Наведение (мышь)
             container.addEventListener('mouseenter', function() {
@@ -1203,7 +1177,7 @@
                     showMarkerDialog('', '#ffffff');
                 }
             });
-                window.addEventListener('orientationchange', function() {
+            window.addEventListener('orientationchange', function() {
                 // Даём время браузеру на смену ориентации
                 setTimeout(function() {
                     camera.aspect = window.innerWidth / window.innerHeight;
