@@ -42,20 +42,20 @@
             z-index: 101;
             opacity: 0.7;
             transition: opacity 0.2s ease;
-            --pole-height: 2.5em; /* значение по умолчанию */
+            --pole-height: 25px; /* фиксированная высота древка */
         }
         .marker-container:hover {
             opacity: 1;
         }
 
-        /* Прямоугольник (текст) – прикреплён левым нижним углом к верхнему концу древка */
+        /* Прямоугольник (текст) – прикреплён нижним краем к верхнему концу древка */
         .marker-rect {
             position: absolute;
             left: calc(-3px);
-            bottom: calc(var(--pole-height) - 4px); /* наезд 4px для устранения щели */
+            bottom: calc(var(--pole-height) - 5px); /* небольшой нахлест для устранения щели */
             
             background: var(--marker-color, #ffffff);
-            padding: 0.75em 1.2em;
+            padding: 0.4em 0.7em;
             white-space: pre !important;
             overflow-wrap: normal !important;
             word-break: normal !important;
@@ -82,7 +82,7 @@
             text-decoration: underline;
         }
 
-        /* Древко */
+        /* Древко фиксированной высоты */
         .marker-pole {
             position: absolute;
             left: 0;
@@ -93,7 +93,6 @@
             border-radius: 3px;
             transform: translateX(-50%);
             pointer-events: none;
-            transition: height 0.2s ease;
         }
 
         /* Точка крепления */
@@ -248,11 +247,29 @@
             padding: 8px 15px;
         }
 
-        /* ===== ДОБАВЛЕНО ДЛЯ OPERA MOBILE ===== */
-        canvas {
-            display: block;
-            touch-action: none; /* запрещает браузеру обрабатывать жесты */
-            -webkit-tap-highlight-color: transparent;
+        /* Кнопка показа/скрытия интерфейса (только для ПК) */
+        #toggle-ui-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transition: background 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        #toggle-ui-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
         }
 
         /* ===== АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА ===== */
@@ -288,6 +305,10 @@
             .dialog-row input,
             .dialog-row select {
                 font-size: 12px;
+            }
+            /* Скрываем кнопку управления на мобильных */
+            #toggle-ui-btn {
+                display: none;
             }
         }
 
@@ -328,6 +349,9 @@
         <button onclick="exportView()" class="secondary hidden" title="Экспорт вида в файл">📤 Экспорт вида</button>
         <button onclick="importView()" class="secondary hidden" title="Импорт вида из файла">📥 Импорт вида</button>
     </div>
+
+    <!-- Кнопка показа/скрытия интерфейса (видна только на ПК) -->
+    <button id="toggle-ui-btn" title="Показать/скрыть управление">⚙️</button>
 
     <!-- Диалог создания маркера -->
     <div id="marker-dialog" class="hidden">
@@ -438,9 +462,6 @@
         let touchVelocity = { x: 0, y: 0 };
         let touchZoomStartFov = fov;
 
-        // ========== ДЕТЕКТОР OPERA MOBILE ==========
-        const isOperaMobile = /opera|opr|opios|opt/i.test(navigator.userAgent) && /mobile/i.test(navigator.userAgent);
-
         // ========== ФУНКЦИЯ ОПРЕДЕЛЕНИЯ МОБИЛЬНОСТИ ==========
         function isMobile() {
             return window.innerWidth <= 768;
@@ -507,8 +528,6 @@
                     scene.add(sphere);
                     
                     document.getElementById('upload-panel').classList.add('hidden');
-                    document.getElementById('info').classList.remove('hidden');
-                    document.getElementById('controls').classList.remove('hidden');
                     showPanoramaTitle();
                     resolve(texture);
                 };
@@ -538,8 +557,6 @@
                         scene.add(sphere);
                         
                         document.getElementById('upload-panel').classList.add('hidden');
-                        document.getElementById('info').classList.remove('hidden');
-                        document.getElementById('controls').classList.remove('hidden');
                         showPanoramaTitle();
                         resolve(texture);
                     };
@@ -570,7 +587,6 @@
         }
 
         function handleTouchMove(e) {
-            // FIX FOR OPERA MOBILE: явный preventDefault на каждом движении
             e.preventDefault();
             const touches = e.touches;
             if (touches.length === 1 && isTouchActive) {
@@ -587,8 +603,6 @@
                     sphere.rotation.x = sphereRotation.x;
                 }
                 lastTouchPosition = currentPos;
-                // Немедленно обновляем маркеры для синхронизации
-                updateMarkerLabels();
             } else if (touches.length === 2 && isTouchActive) {
                 const dx = touches[0].clientX - touches[1].clientX;
                 const dy = touches[0].clientY - touches[1].clientY;
@@ -603,41 +617,12 @@
             e.preventDefault();
             if (e.touches.length === 0) {
                 isTouchActive = false;
-                // FIX FOR OPERA MOBILE: отключаем инерцию для Opera, чтобы избежать рассинхронизации
-                if (isOperaMobile) {
-                    isInertia = false;
-                    velocity = { x: 0, y: 0 };
-                } else {
-                    isInertia = true;
-                    velocity.x = touchVelocity.x;
-                    velocity.y = touchVelocity.y;
-                }
+                isInertia = true;
+                velocity.x = touchVelocity.x;
+                velocity.y = touchVelocity.y;
             } else if (e.touches.length === 1) {
                 lastTouchPosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
             }
-        }
-
-        // ========== ДОЛГОЕ НАЖАТИЕ ДЛЯ УДАЛЕНИЯ МАРКЕРА (ТОЛЬКО ДЕСКТОП) ==========
-        function attachLongPressHandler(element, callback) {
-            let timer = null;
-            const start = (e) => {
-                timer = setTimeout(() => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    callback(e);
-                    timer = null;
-                }, 500);
-            };
-            const cancel = () => {
-                if (timer) {
-                    clearTimeout(timer);
-                    timer = null;
-                }
-            };
-            element.addEventListener('touchstart', start, { passive: true });
-            element.addEventListener('touchend', cancel);
-            element.addEventListener('touchmove', cancel);
-            element.addEventListener('touchcancel', cancel);
         }
 
         // ========== УПРАВЛЕНИЕ КАМЕРОЙ (МЫШЬ + TOUCH) ==========
@@ -666,7 +651,6 @@
                     sphere.rotation.x = sphereRotation.x;
                 }
                 previousMousePosition = { x: e.clientX, y: e.clientY };
-                updateMarkerLabels(); // синхронизация
             });
             document.addEventListener('mouseup', (e) => {
                 if (e.button === 0) {
@@ -771,36 +755,6 @@
             input.click();
         }
 
-        // ========== ФУНКЦИЯ ДЛЯ ОБНОВЛЕНИЯ ВЫСОТЫ ДРЕВКА ==========
-        function updatePoleHeight(marker) {
-            // Даем время браузеру отрисовать элемент
-            setTimeout(() => {
-                if (!marker || !marker.rect || !marker.container) return;
-                
-                // Получаем фактическую высоту текстового блока
-                const rectHeight = marker.rect.offsetHeight;
-                
-                // Базовая минимальная высота
-                const minPoleHeight = 30; // в пикселях
-                
-                // Рассчитываем высоту древка
-                const poleHeight = Math.max(minPoleHeight, rectHeight * 0.8);
-                
-                // Устанавливаем CSS-переменную
-                marker.container.style.setProperty('--pole-height', poleHeight + 'px');
-                
-                // Для обратной совместимости также устанавливаем инлайн-стиль
-                if (marker.pole) {
-                    marker.pole.style.height = poleHeight + 'px';
-                }
-            }, 10);
-        }
-
-        // ========== ФУНКЦИЯ ДЛЯ ОБНОВЛЕНИЯ ВСЕХ ДРЕВКОВ ==========
-        function updateAllPoleHeights() {
-            markers.forEach(marker => updatePoleHeight(marker));
-        }
-
         // ========== МАРКЕРЫ ==========
         function addMarker(coords, label = 'Новый маркер', id = Date.now().toString(), 
                           fontSize = 14, fontFamily = 'Arial, sans-serif', 
@@ -849,25 +803,18 @@
                 }
             };
 
-            // Обработчики мыши (ПКМ)
-            container.addEventListener('contextmenu', function(e) {
+            // Обработчики мыши (ПКМ) – на мобильных не удаляем
+            const contextMenuHandler = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                deleteCallback();
+                if (!isMobile()) {
+                    deleteCallback();
+                }
                 return false;
-            });
-            rect.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                deleteCallback();
-                return false;
-            });
+            };
 
-            // Обработчики долгого нажатия для мобильных — подключаем только если не мобильное устройство
-            if (!isMobile()) {
-                attachLongPressHandler(container, deleteCallback);
-                attachLongPressHandler(rect, deleteCallback);
-            }
+            container.addEventListener('contextmenu', contextMenuHandler);
+            rect.addEventListener('contextmenu', contextMenuHandler);
 
             // Наведение (мышь)
             container.addEventListener('mouseenter', function() {
@@ -892,9 +839,6 @@
             };
             
             markers.push(marker);
-            
-            // Обновляем высоту древка
-            updatePoleHeight(marker);
             
             updateMarkerCount();
             updateMarkerLabels();
@@ -927,8 +871,7 @@
             if (intersection) {
                 const intersectionPoint = intersection.clone();
                 const quaternion = new THREE.Quaternion();
-                // FIX FOR OPERA MOBILE: используем sphere.rotation вместо sphereRotation для синхронизации
-                quaternion.setFromEuler(sphere.rotation);
+                quaternion.setFromEuler(new THREE.Euler(sphereRotation.x, sphereRotation.y, 0));
                 intersectionPoint.applyQuaternion(quaternion.inverse());
                 const spherical = new THREE.Spherical();
                 spherical.setFromVector3(intersectionPoint);
@@ -942,7 +885,7 @@
                 const position = new THREE.Vector3();
                 position.setFromSphericalCoords(CONFIG.sphereRadius, marker.coords.phi, marker.coords.theta);
                 const quaternion = new THREE.Quaternion();
-                quaternion.setFromEuler(sphere.rotation); // используем актуальный поворот сферы
+                quaternion.setFromEuler(sphere.rotation);
                 const rotatedPosition = position.clone().applyQuaternion(quaternion);
                 const vector = rotatedPosition.clone().project(camera);
                 
@@ -953,11 +896,6 @@
                     marker.container.style.display = 'block';
                     marker.container.style.left = `${x}px`;
                     marker.container.style.top = `${y}px`;
-                    
-                    // Периодически обновляем высоту древка (1% кадров)
-                    if (Math.random() < 0.01) {
-                        updatePoleHeight(marker);
-                    }
                 } else {
                     marker.container.style.display = 'none';
                 }
@@ -1198,7 +1136,14 @@
                     showMarkerDialog('', '#ffffff');
                 }
             });
-            // Удаляем orientationchange, оставляем только resize
+            window.addEventListener('orientationchange', function() {
+                setTimeout(function() {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    updateMarkerLabels();
+                }, 200);
+            });
             renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
             document.getElementById('file-input').addEventListener('change', async function(e) {
                 const file = e.target.files[0];
@@ -1214,6 +1159,14 @@
                     document.getElementById('loading-indicator').classList.add('hidden');
                     document.getElementById('manual-upload').classList.remove('hidden');
                 }
+            });
+
+            // Кнопка показа/скрытия интерфейса
+            document.getElementById('toggle-ui-btn').addEventListener('click', function() {
+                const info = document.getElementById('info');
+                const controls = document.getElementById('controls');
+                info.classList.toggle('hidden');
+                controls.classList.toggle('hidden');
             });
         }
 
@@ -1238,9 +1191,6 @@
                 fov += zoomVelocity; zoomVelocity *= zoomFriction;
                 fov = Math.max(minFov, Math.min(maxFov, fov));
                 camera.fov = fov; camera.updateProjectionMatrix();
-                
-                // При зуме обновляем высоту древков
-                updateAllPoleHeights();
             }
         }
 
@@ -1249,16 +1199,10 @@
             initThreeJS();
             initEventHandlers();
             window.addEventListener('resize', () => {
-                // Обновляем параметры камеры
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                
-                // Пересчитываем позиции маркеров и высоту древков
-                updateAllPoleHeights();
                 updateMarkerLabels();
-                
-                // Принудительно рендерим один кадр, чтобы избежать мерцания
                 renderer.render(scene, camera);
             });
             try {
@@ -1267,9 +1211,6 @@
                 loadMarkers();
                 loadInitialView();
                 animate();
-                
-                // Обновляем древки после загрузки
-                setTimeout(updateAllPoleHeights, 500);
             } catch (error) { console.log('Автозагрузка не удалась, ждём ручную'); }
             
             window.saveMarkers = saveMarkers;
