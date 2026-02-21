@@ -302,11 +302,7 @@
             }
         }
 
-        /* Для очень маленьких экранов и альбомной ориентации */
         @media (max-width: 480px) {
-            #controls {
-                padding: 3px;
-            }
             button {
                 padding: 3px 5px;
                 font-size: 9px;
@@ -314,10 +310,10 @@
             }
             #info {
                 font-size: 8px;
-                max-width: 80%;
             }
         }
 
+        /* Для альбомной ориентации на маленьких экранах */
         @media (orientation: landscape) and (max-height: 500px) {
             #controls {
                 bottom: 3px;
@@ -474,6 +470,7 @@
             
             camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.innerHeight, 0.1, 3000);
             camera.position.set(0, 0, 0);
+            camera.lookAt(0, 0, 0); // хотя это не обязательно, так как камера в центре
             
             renderer = new THREE.WebGLRenderer({ 
                 antialias: true,
@@ -950,7 +947,7 @@
                 const position = new THREE.Vector3();
                 position.setFromSphericalCoords(CONFIG.sphereRadius, marker.coords.phi, marker.coords.theta);
                 const quaternion = new THREE.Quaternion();
-                quaternion.setFromEuler(new THREE.Euler(sphereRotation.x, sphereRotation.y, 0));
+                quaternion.setFromEuler(sphere.rotation); // используем актуальный поворот сферы
                 const rotatedPosition = position.clone().applyQuaternion(quaternion);
                 const vector = rotatedPosition.clone().project(camera);
                 
@@ -1266,11 +1263,17 @@
             initThreeJS();
             initEventHandlers();
             window.addEventListener('resize', () => {
+                // Обновляем параметры камеры
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                setTimeout(updateAllPoleHeights, 100);
-                updateMarkerLabels(); // дополнительно
+                
+                // Пересчитываем позиции маркеров и высоту древков
+                updateAllPoleHeights();
+                updateMarkerLabels();
+                
+                // Принудительно рендерим один кадр, чтобы избежать мерцания
+                renderer.render(scene, camera);
             });
             try {
                 await tryLoadPanorama();
