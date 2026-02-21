@@ -82,12 +82,6 @@
             text-decoration: underline;
         }
 
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
         /* Древко */
         .marker-pole {
             position: absolute;
@@ -252,6 +246,13 @@
         }
         .dialog-buttons button {
             padding: 8px 15px;
+        }
+
+        /* ===== ДОБАВЛЕНО ДЛЯ OPERA MOBILE ===== */
+        canvas {
+            display: block;
+            touch-action: none; /* запрещает браузеру обрабатывать жесты */
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* ===== АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА ===== */
@@ -437,9 +438,12 @@
         let touchVelocity = { x: 0, y: 0 };
         let touchZoomStartFov = fov;
 
+        // ========== ДЕТЕКТОР OPERA MOBILE ==========
+        const isOperaMobile = /opera|opr|opios|opt/i.test(navigator.userAgent) && /mobile/i.test(navigator.userAgent);
+
         // ========== ФУНКЦИЯ ОПРЕДЕЛЕНИЯ МОБИЛЬНОСТИ ==========
         function isMobile() {
-            return window.innerWidth <= 768; // можно ужесточить до 480, но оставим 768
+            return window.innerWidth <= 768;
         }
 
         // ========== ИНИЦИАЛИЗАЦИЯ THREE.JS ==========
@@ -566,6 +570,7 @@
         }
 
         function handleTouchMove(e) {
+            // FIX FOR OPERA MOBILE: явный preventDefault на каждом движении
             e.preventDefault();
             const touches = e.touches;
             if (touches.length === 1 && isTouchActive) {
@@ -581,8 +586,9 @@
                     sphere.rotation.y = sphereRotation.y;
                     sphere.rotation.x = sphereRotation.x;
                 }
-                updateMarkerLabels();
                 lastTouchPosition = currentPos;
+                // Немедленно обновляем маркеры для синхронизации
+                updateMarkerLabels();
             } else if (touches.length === 2 && isTouchActive) {
                 const dx = touches[0].clientX - touches[1].clientX;
                 const dy = touches[0].clientY - touches[1].clientY;
@@ -597,9 +603,15 @@
             e.preventDefault();
             if (e.touches.length === 0) {
                 isTouchActive = false;
-                isInertia = true;
-                velocity.x = touchVelocity.x;
-                velocity.y = touchVelocity.y;
+                // FIX FOR OPERA MOBILE: отключаем инерцию для Opera, чтобы избежать рассинхронизации
+                if (isOperaMobile) {
+                    isInertia = false;
+                    velocity = { x: 0, y: 0 };
+                } else {
+                    isInertia = true;
+                    velocity.x = touchVelocity.x;
+                    velocity.y = touchVelocity.y;
+                }
             } else if (e.touches.length === 1) {
                 lastTouchPosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
             }
@@ -653,8 +665,8 @@
                     sphere.rotation.y = sphereRotation.y;
                     sphere.rotation.x = sphereRotation.x;
                 }
-                updateMarkerLabels();
                 previousMousePosition = { x: e.clientX, y: e.clientY };
+                updateMarkerLabels(); // синхронизация
             });
             document.addEventListener('mouseup', (e) => {
                 if (e.button === 0) {
@@ -915,6 +927,7 @@
             if (intersection) {
                 const intersectionPoint = intersection.clone();
                 const quaternion = new THREE.Quaternion();
+                // FIX FOR OPERA MOBILE: используем sphere.rotation вместо sphereRotation для синхронизации
                 quaternion.setFromEuler(sphere.rotation);
                 intersectionPoint.applyQuaternion(quaternion.inverse());
                 const spherical = new THREE.Spherical();
@@ -1185,6 +1198,7 @@
                     showMarkerDialog('', '#ffffff');
                 }
             });
+            // Удаляем orientationchange, оставляем только resize
             renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
             document.getElementById('file-input').addEventListener('change', async function(e) {
                 const file = e.target.files[0];
@@ -1240,11 +1254,11 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 
-                // Немедленно пересчитываем маркеры и древки
+                // Пересчитываем позиции маркеров и высоту древков
                 updateAllPoleHeights();
                 updateMarkerLabels();
                 
-                // Принудительно рендерим кадр для синхронизации
+                // Принудительно рендерим один кадр, чтобы избежать мерцания
                 renderer.render(scene, camera);
             });
             try {
