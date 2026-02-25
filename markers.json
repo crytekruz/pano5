@@ -11,7 +11,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:03:25.158Z"
+      "date": "2026-02-25T10:01:35.666Z"
     },
     {
       "id": "1771747420886",
@@ -24,7 +24,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:03:40.886Z"
+      "date": "2026-02-25T10:01:35.666Z"
     },
     {
       "id": "1771747437302",
@@ -37,7 +37,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:03:57.302Z"
+      "date": "2026-02-25T10:01:35.666Z"
     },
     {
       "id": "1771747455237",
@@ -50,7 +50,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:04:15.237Z"
+      "date": "2026-02-25T10:01:35.666Z"
     },
     {
       "id": "1771747486728",
@@ -63,7 +63,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:04:46.728Z"
+      "date": "2026-02-25T10:01:35.666Z"
     },
     {
       "id": "1771747549898",
@@ -76,7 +76,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:05:49.899Z"
+      "date": "2026-02-25T10:01:35.666Z"
     },
     {
       "id": "1771747580471",
@@ -89,20 +89,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:06:20.471Z"
-    },
-    {
-      "id": "1771747630795",
-      "theta": -0.3188999017541828,
-      "phi": 2.3038345391747925,
-      "text": "Реабилитационный\nцентр",
-      "fontSize": 12,
-      "fontFamily": "Arial, sans-serif",
-      "fontWeight": "normal",
-      "fontStyle": "normal",
-      "url": "",
-      "color": "#ffffff",
-      "date": "2026-02-22T08:07:10.795Z"
+      "date": "2026-02-25T10:01:35.667Z"
     },
     {
       "id": "1771747727023",
@@ -115,7 +102,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:08:47.024Z"
+      "date": "2026-02-25T10:01:35.667Z"
     },
     {
       "id": "1771747787325",
@@ -128,7 +115,7 @@
       "fontStyle": "normal",
       "url": "https://crytekruz.github.io/pano2/",
       "color": "#ffda99",
-      "date": "2026-02-22T08:09:47.325Z"
+      "date": "2026-02-25T10:01:35.667Z"
     },
     {
       "id": "1771747817768",
@@ -141,7 +128,7 @@
       "fontStyle": "normal",
       "url": "https://crytekruz.github.io/pano3/",
       "color": "#ffda99",
-      "date": "2026-02-22T08:10:17.768Z"
+      "date": "2026-02-25T10:01:35.667Z"
     },
     {
       "id": "1771747835603",
@@ -154,7 +141,7 @@
       "fontStyle": "normal",
       "url": "https://crytekruz.github.io/pano4/",
       "color": "#ffda99",
-      "date": "2026-02-22T08:10:35.603Z"
+      "date": "2026-02-25T10:01:35.668Z"
     },
     {
       "id": "1771747998550",
@@ -167,7 +154,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:13:18.550Z"
+      "date": "2026-02-25T10:01:35.668Z"
     },
     {
       "id": "1771748022654",
@@ -180,7 +167,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:13:42.654Z"
+      "date": "2026-02-25T10:01:35.668Z"
     },
     {
       "id": "1771748037022",
@@ -193,7 +180,7 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:13:57.022Z"
+      "date": "2026-02-25T10:01:35.668Z"
     },
     {
       "id": "1771748048283",
@@ -206,7 +193,85 @@
       "fontStyle": "normal",
       "url": "",
       "color": "#ffffff",
-      "date": "2026-02-22T08:14:08.283Z"
+      "date": "2026-02-25T10:01:35.668Z"
+    },
+    {
+      "id": "1772013817667",
+      "theta": -0.11744935121165818,
+      "phi": 2.246276982916281,
+      "text": "Реабилитационный\nцентр",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "color": "#ffda99",
+      "date": "2026-02-25T10:03:37.668Z"
+    },
+    {
+      "id": "1772013828567",
+      "theta": -0.6139358894789244,
+      "phi": 2.2048909583294365,
+      "text": "Инженерная\nинфраструктура",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "color": "#ffffff",
+      "date": "2026-02-25T10:03:48.567Z"
+    },
+    {
+      "id": "1772013851327",
+      "theta": 1.3288096274783618,
+      "phi": 1.863493042619534,
+      "text": "ИЖС",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "color": "#ffda99",
+      "date": "2026-02-25T10:04:11.327Z"
+    },
+    {
+      "id": "1772013863887",
+      "theta": 0.5540808033487693,
+      "phi": 2.3428906099943783,
+      "text": "ИЖС",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "color": "#ffda99",
+      "date": "2026-02-25T10:04:23.887Z"
+    },
+    {
+      "id": "1772013882311",
+      "theta": 0.11696435166252539,
+      "phi": 2.1107653095193175,
+      "text": "Блокированная\nзастройка",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "color": "#ffda99",
+      "date": "2026-02-25T10:04:42.312Z"
+    },
+    {
+      "id": "1772013929605",
+      "theta": 0.9263916889640423,
+      "phi": 2.0085980994830637,
+      "text": "Вишневый\nсад",
+      "fontSize": 12,
+      "fontFamily": "Arial, sans-serif",
+      "fontWeight": "normal",
+      "fontStyle": "normal",
+      "url": "",
+      "color": "#ffffff",
+      "date": "2026-02-25T10:05:29.605Z"
     }
   ],
   "view": {
